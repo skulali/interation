@@ -1,0 +1,12 @@
+---
+title: "Writing Functions"
+author: "Sharon Kulali"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(rvest)
+```
+
+
