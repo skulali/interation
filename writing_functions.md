@@ -2,6 +2,50 @@ Writing Functions
 ================
 Sharon Kulali
 
+``` r
+library(tidyverse)
+```
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.3     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.2     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+``` r
+library(rvest)
+```
+
+    ## 
+    ## Attaching package: 'rvest'
+    ## 
+    ## The following object is masked from 'package:readr':
+    ## 
+    ##     guess_encoding
+
+``` r
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
 Set seed for reproducibility.
 
 ``` r
@@ -86,3 +130,105 @@ z_score(iris)
 ```
 
     ## Error in z_score(iris): Argument should be numbers
+
+### Multiple outputs.
+
+Write a function that returns the mean and sd from a sample of numbers.
+
+``` r
+mean_and_sd = function(x) {
+  
+  if(!is.numeric(x)) {
+    stop("Argument should be numbers")
+  } else if (length(x) < 2) {
+    stop("You need at least 2 numbers to get z scores")
+  }
+  
+  mean_x = mean(x)
+  sd_x = sd(x)
+  
+  tibble(
+    mean = mean_x,
+    sd = sd_x
+  )
+}
+```
+
+Double check I did this right…
+
+``` r
+mean_and_sd(x_vec)
+```
+
+    ## # A tibble: 1 × 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  5.02 0.250
+
+### Start getting means and sds
+
+``` r
+x_vec = rnorm(n = 30, mean = 5, sd = 0.5)
+
+tibble(
+    mean = mean(x_vec),
+    sd = sd(x_vec)
+  )
+```
+
+    ## # A tibble: 1 × 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  5.16 0.643
+
+Let’s write a function that uses `n`, a true mean, and true SD as
+inputs.
+
+``` r
+sim_mean_sd = function(n_obs, mu, sigma) {
+  
+  x_vec = rnorm(n = n_obs, mean = mu, sd = sigma)
+
+tibble(
+    mean = mean(x_vec),
+    sd = sd(x_vec)
+  )
+
+}
+
+sim_mean_sd(n_obs = 3000, mu = 50, sigma = 12.3)
+```
+
+    ## # A tibble: 1 × 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  49.9  12.1
+
+``` r
+sim_mean_sd(12, 24, 4)
+```
+
+    ## # A tibble: 1 × 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  22.0  3.25
+
+``` r
+sim_mean_sd = function(n_obs, mu = 5, sigma = 1) {
+  
+  x_vec = rnorm(n = n_obs, mean = mu, sd = sigma)
+
+tibble(
+    mean = mean(x_vec),
+    sd = sd(x_vec)
+  )
+
+}
+
+sim_mean_sd(n_obs = 3000)
+```
+
+    ## # A tibble: 1 × 2
+    ##    mean    sd
+    ##   <dbl> <dbl>
+    ## 1  4.99 0.997
